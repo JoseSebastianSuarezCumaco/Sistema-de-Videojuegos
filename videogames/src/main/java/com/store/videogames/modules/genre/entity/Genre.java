@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.UUID;
 
 @Entity(name="genre")
 @Getter
@@ -19,13 +20,10 @@ import lombok.Setter;
 public class Genre{
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="id_genre")
-    private int id_genre;
+    private UUID id_genre;
 
-    @Column(name="name",length = 150)
+    @Column(name="name", nullable = false, unique = true, length = 50)
     private String name;
-
-    @Column(name="status")
-    private boolean status;
 }
