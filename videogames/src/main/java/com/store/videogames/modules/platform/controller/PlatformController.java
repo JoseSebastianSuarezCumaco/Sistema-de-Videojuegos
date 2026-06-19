@@ -14,40 +14,32 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/platform")
-public class PlatformController extends AbstractController<PlatformDTO, Integer> {
+public class PlatformController extends AbstractController<PlatformDTO, String> {
 
-    @Autowired
-    private PlatformImplement service;
+    @Autowired private PlatformImplement service;
 
-    @Override
-    @PostMapping("/create")
+    @Override @PostMapping("/create")
     public ResponseEntity<String> create(@Valid @RequestBody PlatformDTO dto) {
         return created(service.Create(dto));
     }
 
-    @Override
-    @JsonView(PlatformViews.Summary.class)
-    @GetMapping("/getAll")
+    @Override @JsonView(PlatformViews.Summary.class) @GetMapping("/getAll")
     public ResponseEntity<List<PlatformDTO>> getAll() {
         return ok(service.GetAll());
     }
 
-    @Override
-    @JsonView(PlatformViews.Detail.class)
-    @GetMapping("/getById/{id}")
-    public ResponseEntity<PlatformDTO> getById(@PathVariable Integer id) {
+    @Override @JsonView(PlatformViews.Detail.class) @GetMapping("/getById/{id}")
+    public ResponseEntity<PlatformDTO> getById(@PathVariable String id) {
         return ok(service.GetById(id));
     }
 
-    @Override
-    @PutMapping("/update/{id}")
-    public ResponseEntity<String> update(@PathVariable Integer id, @Valid @RequestBody PlatformDTO dto) {
+    @Override @PutMapping("/update/{id}")
+    public ResponseEntity<String> update(@PathVariable String id, @Valid @RequestBody PlatformDTO dto) {
         return ok(service.Update(id, dto));
     }
 
-    @Override
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) {
+    @Override @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable String id) {
         return ok(service.Delete(id) ? "Eliminado correctamente" : "No encontrado");
     }
 }

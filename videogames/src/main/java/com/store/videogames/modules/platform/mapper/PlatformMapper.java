@@ -1,9 +1,8 @@
 package com.store.videogames.modules.platform.mapper;
 
-import org.springframework.stereotype.Component;
-
 import com.store.videogames.modules.platform.dto.PlatformDTO;
 import com.store.videogames.modules.platform.entity.Platform;
+import org.springframework.stereotype.Component;
 
 @Component
 public class PlatformMapper {
@@ -14,7 +13,6 @@ public class PlatformMapper {
         dto.setName(platform.getName());
         dto.setSlug(platform.getSlug());
         dto.setIcon_url(platform.getIcon_url());
-        dto.setStatus(platform.isStatus());
         return dto;
     }
 
@@ -23,7 +21,6 @@ public class PlatformMapper {
         platform.setName(dto.getName());
         platform.setSlug(dto.getSlug());
         platform.setIcon_url(dto.getIcon_url());
-        platform.setStatus(dto.isStatus());
         return platform;
     }
 }
