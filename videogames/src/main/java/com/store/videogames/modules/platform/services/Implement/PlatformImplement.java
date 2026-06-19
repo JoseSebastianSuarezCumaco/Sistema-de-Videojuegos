@@ -1,9 +1,13 @@
 package com.store.videogames.modules.platform.services.Implement;
+
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.store.videogames.modules.platform.entity.Platform;
+
+import com.store.videogames.modules.platform.dto.PlatformDTO;
+import com.store.videogames.modules.platform.mapper.PlatformMapper;
 import com.store.videogames.modules.platform.repository.PlatformRepository;
 import com.store.videogames.modules.platform.services.Interface.IPlatform;
 
@@ -11,49 +15,51 @@ import com.store.videogames.modules.platform.services.Interface.IPlatform;
 public class PlatformImplement implements IPlatform {
 
     @Autowired
-    PlatformRepository data;
+    private PlatformRepository data;
+
+    @Autowired
+    private PlatformMapper mapper;
 
     @Override
-    public String Create(Platform platform) {
+    public String Create(PlatformDTO dto) {
         try {
-            data.save(platform);
-            return "Platform created successfully";
+            data.save(mapper.toEntity(dto));
+            return "Platform creada correctamente";
         } catch (Exception e) {
-            return "Error creating platform: " + e.getMessage();
+            return "Error al crear platform: " + e.getMessage();
         }
     }
 
     @Override
-    public List<Platform> GetAll() {
-        return data.findAll();
+    public List<PlatformDTO> GetAll() {
+        return data.findAll().stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Platform GetById(Integer platformId) {
-        Optional<Platform> platform = data.findById(platformId);
-        if (!platform.isPresent()) {
-            throw new RuntimeException("Platform not found with id: " + platformId);
-        }
-        return platform.get();
+    public PlatformDTO GetById(Integer id) {
+        return data.findById(id)
+                .map(mapper::toDTO)
+                .orElseThrow(() -> new RuntimeException("Platform no encontrada con id: " + id));
     }
 
     @Override
-    public Platform Update(Integer platformId) {
-        throw new UnsupportedOperationException("Unimplemented method 'Update'");
+    public String Update(Integer id, PlatformDTO dto) {
+        var platform = data.findById(id)
+                .orElseThrow(() -> new RuntimeException("Platform no encontrada con id: " + id));
+        platform.setName(dto.getName());
+        platform.setSlug(dto.getSlug());
+        platform.setIcon_url(dto.getIcon_url());
+        platform.setStatus(dto.isStatus());
+        data.save(platform);
+        return "Platform actualizada correctamente";
     }
 
     @Override
-    public Platform PartialUpdate(Integer platformId) {
-        throw new UnsupportedOperationException("Unimplemented method 'PartialUpdate'");
-    }
-
-    @Override
-    public boolean Delete(Integer platformId) {
-        throw new UnsupportedOperationException("Unimplemented method 'Delete'");
-    }
-
-    @Override
-    public boolean LogicalDelete(Integer platformId) {
-        throw new UnsupportedOperationException("Unimplemented method 'LogicalDelete'");
+    public boolean Delete(Integer id) {
+        if (!data.existsById(id)) return false;
+        data.deleteById(id);
+        return true;
     }
 }

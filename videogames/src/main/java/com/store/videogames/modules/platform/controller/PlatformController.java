@@ -1,32 +1,53 @@
 package com.store.videogames.modules.platform.controller;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.store.videogames.modules.platform.entity.Platform;
+
+import com.fasterxml.jackson.annotation.JsonView;
+import com.store.videogames.modules.platform.dto.PlatformDTO;
+import com.store.videogames.modules.platform.dto.PlatformViews;
 import com.store.videogames.modules.platform.services.Implement.PlatformImplement;
+import com.store.videogames.shared.controller.AbstractController;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/platform")
-public class PlatformController {
+public class PlatformController extends AbstractController<PlatformDTO, Integer> {
 
     @Autowired
-    PlatformImplement service;
+    private PlatformImplement service;
 
+    @Override
     @PostMapping("/create")
-    public ResponseEntity<Object> Create(@RequestBody Platform platform) {
-        String retorno = service.Create(platform);
-        return new ResponseEntity<Object>(retorno, HttpStatus.OK);
+    public ResponseEntity<String> create(@Valid @RequestBody PlatformDTO dto) {
+        return created(service.Create(dto));
     }
 
+    @Override
+    @JsonView(PlatformViews.Summary.class)
     @GetMapping("/getAll")
-    public ResponseEntity<List<Platform>> GetAll() {
-        var retorno = service.GetAll();
-        return new ResponseEntity<List<Platform>>(retorno, HttpStatus.OK);
+    public ResponseEntity<List<PlatformDTO>> getAll() {
+        return ok(service.GetAll());
+    }
+
+    @Override
+    @JsonView(PlatformViews.Detail.class)
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<PlatformDTO> getById(@PathVariable Integer id) {
+        return ok(service.GetById(id));
+    }
+
+    @Override
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> update(@PathVariable Integer id, @Valid @RequestBody PlatformDTO dto) {
+        return ok(service.Update(id, dto));
+    }
+
+    @Override
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable Integer id) {
+        return ok(service.Delete(id) ? "Eliminado correctamente" : "No encontrado");
     }
 }

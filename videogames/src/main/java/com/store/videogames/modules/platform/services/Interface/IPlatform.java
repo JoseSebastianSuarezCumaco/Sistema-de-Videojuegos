@@ -1,13 +1,13 @@
 package com.store.videogames.modules.platform.services.Interface;
+
 import java.util.List;
-import com.store.videogames.modules.platform.entity.Platform;
+
+import com.store.videogames.modules.platform.dto.PlatformDTO;
 
 public interface IPlatform {
-    public String Create(Platform platform);
-    public List<Platform> GetAll();
-    public Platform GetById(Integer platformId);
-    public Platform Update(Integer platformId);
-    public Platform PartialUpdate(Integer platformId);
-    public boolean Delete(Integer platformId);
-    public boolean LogicalDelete(Integer platformId);
+    String Create(PlatformDTO dto);
+    List<PlatformDTO> GetAll();
+    PlatformDTO GetById(Integer id);
+    String Update(Integer id, PlatformDTO dto);
+    boolean Delete(Integer id);
 }
