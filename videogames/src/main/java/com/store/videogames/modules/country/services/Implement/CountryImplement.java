@@ -1,12 +1,13 @@
 package com.store.videogames.modules.country.services.Implement;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.store.videogames.modules.country.entity.Country;
+import com.store.videogames.modules.country.dto.CountryDTO;
+import com.store.videogames.modules.country.mapper.CountryMapper;
 import com.store.videogames.modules.country.repository.CountryRepository;
 import com.store.videogames.modules.country.services.Interface.ICountry;
 
@@ -14,49 +15,50 @@ import com.store.videogames.modules.country.services.Interface.ICountry;
 public class CountryImplement implements ICountry {
 
     @Autowired
-    CountryRepository data;
+    private CountryRepository data;
+
+    @Autowired
+    private CountryMapper mapper;
 
     @Override
-    public String Create(Country country) {
+    public String Create(CountryDTO dto) {
         try {
-            data.save(country);
-            return "Country created successfully";
+            data.save(mapper.toEntity(dto));
+            return "Country creado correctamente";
         } catch (Exception e) {
-            return "Error creating country: " + e.getMessage();
+            return "Error al crear country: " + e.getMessage();
         }
     }
 
     @Override
-    public List<Country> GetAll() {
-        return data.findAll();
+    public List<CountryDTO> GetAll() {
+        return data.findAll().stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Country GetById(Integer countryId) {
-        Optional<Country> country = data.findById(countryId);
-        if (!country.isPresent()) {
-            throw new RuntimeException("Country not found with id: " + countryId);
-        }
-        return country.get();
+    public CountryDTO GetById(Integer id) {
+        return data.findById(id)
+                .map(mapper::toDTO)
+                .orElseThrow(() -> new RuntimeException("Country no encontrado con id: " + id));
     }
 
     @Override
-    public Country Update(Integer countryId) {
-        throw new UnsupportedOperationException("Unimplemented method 'Update'");
+    public String Update(Integer id, CountryDTO dto) {
+        var country = data.findById(id)
+                .orElseThrow(() -> new RuntimeException("Country no encontrado con id: " + id));
+        country.setName(dto.getName());
+        country.setCode(dto.getCode());
+        country.setStatus(dto.isStatus());
+        data.save(country);
+        return "Country actualizado correctamente";
     }
 
     @Override
-    public Country PartialUpdate(Integer countryId) {
-        throw new UnsupportedOperationException("Unimplemented method 'PartialUpdate'");
-    }
-
-    @Override
-    public boolean Delete(Integer countryId) {
-        throw new UnsupportedOperationException("Unimplemented method 'Delete'");
-    }
-
-    @Override
-    public boolean LogicalDelete(Integer countryId) {
-        throw new UnsupportedOperationException("Unimplemented method 'LogicalDelete'");
+    public boolean Delete(Integer id) {
+        if (!data.existsById(id)) return false;
+        data.deleteById(id);
+        return true;
     }
 }

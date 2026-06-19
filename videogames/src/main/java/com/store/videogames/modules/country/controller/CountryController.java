@@ -1,35 +1,53 @@
 package com.store.videogames.modules.country.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.store.videogames.modules.country.entity.Country;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.store.videogames.modules.country.dto.CountryDTO;
+import com.store.videogames.modules.country.dto.CountryViews;
 import com.store.videogames.modules.country.services.Implement.CountryImplement;
+import com.store.videogames.shared.controller.AbstractController;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/country")
-public class CountryController {
+public class CountryController extends AbstractController<CountryDTO, Integer> {
 
     @Autowired
-    CountryImplement service;
+    private CountryImplement service;
 
+    @Override
     @PostMapping("/create")
-    public ResponseEntity<Object> Create(@RequestBody Country country) {
-        String retorno = service.Create(country);
-        return new ResponseEntity<Object>(retorno, HttpStatus.OK);
+    public ResponseEntity<String> create(@Valid @RequestBody CountryDTO dto) {
+        return created(service.Create(dto));
     }
 
+    @Override
+    @JsonView(CountryViews.Summary.class)
     @GetMapping("/getAll")
-    public ResponseEntity<List<Country>> GetAll() {
-        var retorno = service.GetAll();
-        return new ResponseEntity<List<Country>>(retorno, HttpStatus.OK);
+    public ResponseEntity<List<CountryDTO>> getAll() {
+        return ok(service.GetAll());
+    }
+
+    @Override
+    @JsonView(CountryViews.Detail.class)
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<CountryDTO> getById(@PathVariable Integer id) {
+        return ok(service.GetById(id));
+    }
+
+    @Override
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> update(@PathVariable Integer id, @Valid @RequestBody CountryDTO dto) {
+        return ok(service.Update(id, dto));
+    }
+
+    @Override
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable Integer id) {
+        return ok(service.Delete(id) ? "Eliminado correctamente" : "No encontrado");
     }
 }
