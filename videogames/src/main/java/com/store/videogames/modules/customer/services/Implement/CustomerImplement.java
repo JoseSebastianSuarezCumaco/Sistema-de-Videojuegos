@@ -25,7 +25,7 @@ public class CustomerImplement implements ICustomer {
     @Autowired
     private CustomerMapper mapper;
 
-    private Country findCountry(Integer id) {
+    private Country findCountry(String id) {
         return countryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Country no encontrado con id: " + id));
     }

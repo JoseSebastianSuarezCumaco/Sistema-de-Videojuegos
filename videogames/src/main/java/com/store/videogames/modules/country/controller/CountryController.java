@@ -14,40 +14,32 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/country")
-public class CountryController extends AbstractController<CountryDTO, Integer> {
+public class CountryController extends AbstractController<CountryDTO, String> {
 
-    @Autowired
-    private CountryImplement service;
+    @Autowired private CountryImplement service;
 
-    @Override
-    @PostMapping("/create")
+    @Override @PostMapping("/create")
     public ResponseEntity<String> create(@Valid @RequestBody CountryDTO dto) {
         return created(service.Create(dto));
     }
 
-    @Override
-    @JsonView(CountryViews.Summary.class)
-    @GetMapping("/getAll")
+    @Override @JsonView(CountryViews.Summary.class) @GetMapping("/getAll")
     public ResponseEntity<List<CountryDTO>> getAll() {
         return ok(service.GetAll());
     }
 
-    @Override
-    @JsonView(CountryViews.Detail.class)
-    @GetMapping("/getById/{id}")
-    public ResponseEntity<CountryDTO> getById(@PathVariable Integer id) {
+    @Override @JsonView(CountryViews.Detail.class) @GetMapping("/getById/{id}")
+    public ResponseEntity<CountryDTO> getById(@PathVariable String id) {
         return ok(service.GetById(id));
     }
 
-    @Override
-    @PutMapping("/update/{id}")
-    public ResponseEntity<String> update(@PathVariable Integer id, @Valid @RequestBody CountryDTO dto) {
+    @Override @PutMapping("/update/{id}")
+    public ResponseEntity<String> update(@PathVariable String id, @Valid @RequestBody CountryDTO dto) {
         return ok(service.Update(id, dto));
     }
 
-    @Override
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) {
+    @Override @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable String id) {
         return ok(service.Delete(id) ? "Eliminado correctamente" : "No encontrado");
     }
 }

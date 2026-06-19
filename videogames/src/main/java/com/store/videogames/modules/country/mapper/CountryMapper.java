@@ -1,9 +1,8 @@
 package com.store.videogames.modules.country.mapper;
 
-import org.springframework.stereotype.Component;
-
 import com.store.videogames.modules.country.dto.CountryDTO;
 import com.store.videogames.modules.country.entity.Country;
+import org.springframework.stereotype.Component;
 
 @Component
 public class CountryMapper {
@@ -13,7 +12,6 @@ public class CountryMapper {
         dto.setId_country(country.getId_country());
         dto.setName(country.getName());
         dto.setCode(country.getCode());
-        dto.setStatus(country.isStatus());
         return dto;
     }
 
@@ -21,7 +19,6 @@ public class CountryMapper {
         Country country = new Country();
         country.setName(dto.getName());
         country.setCode(dto.getCode());
-        country.setStatus(dto.isStatus());
         return country;
     }
 }

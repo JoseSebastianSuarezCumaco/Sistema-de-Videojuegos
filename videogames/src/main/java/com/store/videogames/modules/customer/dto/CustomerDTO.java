@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -56,8 +55,8 @@ public class CustomerDTO {
     private boolean is_verified;
 
     @JsonView(CustomerViews.Summary.class)
-    @NotNull(message = "El país es obligatorio")
-    private Integer id_country;
+    @NotBlank(message = "El país es obligatorio")
+    private String id_country;
 
     @JsonView(CustomerViews.Detail.class)
     private LocalDateTime deleted_at;
