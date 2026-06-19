@@ -1,27 +1,14 @@
 package com.store.videogames.modules.sale.entity;
 
+import com.store.videogames.modules.customer.entity.Customer;
+import jakarta.persistence.*;
+import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.store.videogames.modules.customer.entity.Customer;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @Entity(name = "sale")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter @Setter
+@AllArgsConstructor @NoArgsConstructor
 public class Sale {
 
     @Id
@@ -29,22 +16,22 @@ public class Sale {
     @Column(name = "id_sale")
     private String id_sale;
 
-    @Column(name = "sale_date")
+    @Column(name = "sale_date", nullable = false)
     private LocalDateTime sale_date;
 
-    @Column(name = "total", precision = 18, scale = 2)
+    @Column(name = "total", nullable = false, precision = 10, scale = 2)
     private BigDecimal total;
 
     @ManyToOne
-    @JoinColumn(name = "id_customer")
+    @JoinColumn(name = "id_customer", nullable = false)
     private Customer id_customer;
 
-    @Column(name = "status", length = 30)
-    private String status;
+    @Column(name = "status", length = 20, nullable = false)
+    private String status = "pending";
 
-    @Column(name = "payment_method", length = 54)
+    @Column(name = "payment_method", length = 50)
     private String payment_method;
 
-    @Column(name = "currency", length = 30)
-    private String currency;
+    @Column(name = "currency", length = 10, nullable = false)
+    private String currency = "USD";
 }
