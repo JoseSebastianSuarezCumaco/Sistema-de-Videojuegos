@@ -1,35 +1,53 @@
 package com.store.videogames.modules.sale.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.store.videogames.modules.sale.entity.Sale;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.store.videogames.modules.sale.dto.SaleDTO;
+import com.store.videogames.modules.sale.dto.SaleViews;
 import com.store.videogames.modules.sale.services.Implement.SaleImplement;
+import com.store.videogames.shared.controller.AbstractController;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/sale")
-public class SaleController {
+public class SaleController extends AbstractController<SaleDTO, String> {
 
     @Autowired
-    SaleImplement service;
+    private SaleImplement service;
 
+    @Override
     @PostMapping("/create")
-    public ResponseEntity<Object> Create(@RequestBody Sale sale) {
-        String retorno = service.Create(sale);
-        return new ResponseEntity<Object>(retorno, HttpStatus.OK);
+    public ResponseEntity<String> create(@Valid @RequestBody SaleDTO dto) {
+        return created(service.Create(dto));
     }
 
+    @Override
+    @JsonView(SaleViews.Summary.class)
     @GetMapping("/getAll")
-    public ResponseEntity<List<Sale>> GetAll() {
-        var retorno = service.GetAll();
-        return new ResponseEntity<List<Sale>>(retorno, HttpStatus.OK);
+    public ResponseEntity<List<SaleDTO>> getAll() {
+        return ok(service.GetAll());
+    }
+
+    @Override
+    @JsonView(SaleViews.Detail.class)
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<SaleDTO> getById(@PathVariable String id) {
+        return ok(service.GetById(id));
+    }
+
+    @Override
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> update(@PathVariable String id, @Valid @RequestBody SaleDTO dto) {
+        return ok(service.Update(id, dto));
+    }
+
+    @Override
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable String id) {
+        return ok(service.Delete(id) ? "Eliminado correctamente" : "No encontrado");
     }
 }
