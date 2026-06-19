@@ -1,33 +1,21 @@
 package com.store.videogames.modules.country.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity(name = "country")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter @Setter
+@AllArgsConstructor @NoArgsConstructor
 public class Country {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_country")
-    private int id_country;
+    private String id_country;
 
-    @Column(name = "name", length = 150)
+    @Column(name = "name", length = 50, nullable = false)
     private String name;
 
-    @Column(name = "code", length = 10)
+    @Column(name = "code", length = 10, nullable = false)
     private String code;
-
-    @Column(name = "status")
-    private boolean status;
 }
