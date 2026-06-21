@@ -1,9 +1,20 @@
 package com.store.videogames.modules.developer.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.UUID;
+
+import com.store.videogames.modules.country.entity.Country;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity(name = "developer")
 @Getter

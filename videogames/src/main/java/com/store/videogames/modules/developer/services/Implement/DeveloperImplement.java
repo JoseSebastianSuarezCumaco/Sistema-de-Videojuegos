@@ -37,7 +37,7 @@ public class DeveloperImplement implements IDeveloper {
         Developer existing = getById(id);
 
         existing.setName(developer.getName());
-        existing.setId_country(developer.getId_country());
+        existing.setCountry(developer.getCountry());
         existing.setWebsite_url(developer.getWebsite_url());
         existing.setDescription(developer.getDescription());
         existing.setLogo_url(developer.getLogo_url());
@@ -52,8 +52,8 @@ public class DeveloperImplement implements IDeveloper {
         if (developer.getName() != null) {
             existing.setName(developer.getName());
         }
-        if (developer.getId_country() != null) {
-            existing.setId_country(developer.getId_country());
+        if (developer.getCountry() != null) {
+            existing.setCountry(developer.getCountry());
         }
         if (developer.getWebsite_url() != null) {
             existing.setWebsite_url(developer.getWebsite_url());

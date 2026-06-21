@@ -3,8 +3,6 @@ package com.store.videogames.modules.genre.services.Interface;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.scheduling.config.Task;
-
 import com.store.videogames.modules.genre.entity.Genre;
 
 public interface IGenre {
@@ -14,5 +12,4 @@ public interface IGenre {
     public Genre update(UUID genreId, Genre genre);
     public Genre partialUpdate(UUID genreId, Genre genre);
     public boolean delete(UUID genreId);
-    public boolean LogicalDelete(UUID genreId);
 }
