@@ -3,10 +3,11 @@ package com.store.videogames.modules.game.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GeneratedValue; 
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_game")
-    private String id_game;
+    private UUID id_game;
 
     @Column(name = "title", length = 50)
     private String title;
