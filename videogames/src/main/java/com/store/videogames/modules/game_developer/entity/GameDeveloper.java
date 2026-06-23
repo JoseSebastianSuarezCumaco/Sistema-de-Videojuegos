@@ -1,9 +1,9 @@
-package com.store.videogames.modules.game_genre.entity;
+package com.store.videogames.modules.game_developer.entity;
 
 import java.util.UUID;
 
+import com.store.videogames.modules.developer.entity.Developer;
 import com.store.videogames.modules.game.entity.Game;
-import com.store.videogames.modules.genre.entity.Genre;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,24 +17,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-@Entity(name = "game_genre")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GameGenre {
+@Entity(name = "game_developer")
+public class GameDeveloper {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id_game_genre")
-    private UUID id_game_genre;
+    @Column(name = "id_game_developer")
+    private UUID id_game_developer;
 
     @ManyToOne
     @JoinColumn(name = "id_game")
     private Game game;
 
     @ManyToOne
-    @JoinColumn(name = "id_genre")
-    private Genre genre;
+    @JoinColumn(name = "id_developer")
+    private Developer developer;
+
 }
